@@ -2,7 +2,7 @@ $(function() {
   //彩蛋
   $.get('/info',function(data){
     console.log(data);
-  })
+  });
   //初始化高亮
   var modelist = ace.require('ace/ext/modelist').modesByName;
   var highlight = ace.require('ace/ext/static_highlight');
@@ -18,7 +18,7 @@ $(function() {
         theme: 'ace/theme/github',
         startLineNumber: 1,
         showGutter: false,
-        trim: true,
+        trim: true
       },
       function(highlighted) {}
     );
@@ -77,11 +77,11 @@ $(function() {
   //目录展开
   $('.fix-menu .title').click(function() {
     $(this).next().slideToggle(300);
-  })
+  });
 
   setTimeout(function() {
     $('.fix-menu .title').trigger('click')
-  }, 300)
+  }, 300);
 
 
   //得到地址栏信息
@@ -110,7 +110,7 @@ $(function() {
   if ($(".fix-menu ul").height() >= 500) {
     $(".fix-menu ul").slimScroll({
       height: '500px',
-      alwaysVisible: true,
+      alwaysVisible: true
     });
   }
 
@@ -163,14 +163,14 @@ $(function() {
     "s":/^[\u4E00-\u9FA5\uf900-\ufa2d\u002f\w\.\s]{1,}$/, //不包含特殊字符包含'/'
     "s6-18":/^[\u4E00-\u9FA5\uf900-\ufa2d\w\.\s]{6,18}$/, //不包含特殊字符的6-18位任意
     "e":/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/  //邮箱
-  }
+  };
   //注册
   var registerFrom = {
     name : false,
     email: false,
     password:false,
     role:false
-  }
+  };
   $('#register input[name=name]').blur(function(){
     if(!(reg['*'].test($(this).val()))){
       $(this).parent('.form-group').addClass('has-error');
@@ -181,7 +181,7 @@ $(function() {
       $(this).attr('placeholder','姓名');
       registerFrom.name =$(this).val();
     }
-  })
+  });
   $('#register input[name=email]').blur(function(){
     if(!(reg['e'].test($(this).val()))){
       $(this).parent('.form-group').addClass('has-error');
@@ -192,7 +192,7 @@ $(function() {
       $(this).attr('placeholder','邮箱');
       registerFrom.email =$(this).val();
     }
-  })
+  });
   $('#register input[name=password]').blur(function(){
     if(!(reg['*6-16'].test($(this).val()))){
       $(this).parent('.form-group').addClass('has-error');
@@ -201,7 +201,7 @@ $(function() {
       $(this).parent('.form-group').removeClass('has-error');
       $(this).attr('placeholder','密码');
     }
-  })
+  });
   $('#register input[name=repassword]').blur(function(){
     if($(this).val() != $('#register input[name=password]').val() || $(this).val() == ''){
       $(this).parent('.form-group').addClass('has-error');
@@ -212,7 +212,7 @@ $(function() {
       $(this).attr('placeholder','再次输入密码');
       registerFrom.password = $(this).val();
     }
-  })
+  });
   $('#register select[name=role]').blur(function(){
     //console.log($(this).val());
     if($(this).val() == -1 || $(this).val() == undefined || $(this).val() == null){
@@ -222,7 +222,7 @@ $(function() {
       $(this).parent('.form-group').removeClass('has-error');
       registerFrom.role = $(this).val();
     }
-  })
+  });
   $('#register button[name=submit]').click(function(){
     console.log(registerFrom);
     for(var key in registerFrom){
@@ -260,7 +260,7 @@ $(function() {
         }
       })
     }
-  })
+  });
   //登陆
   var loginFrom = {
     email : false,
@@ -276,7 +276,7 @@ $(function() {
       $(this).attr('placeholder','邮箱');
       loginFrom.email =$(this).val();
     }
-  })
+  });
   $('#login input[name=password]').blur(function(){
     if(!(reg['*6-16'].test($(this).val()))){
       $(this).parent('.form-group').addClass('has-error');
@@ -287,7 +287,7 @@ $(function() {
       $(this).attr('placeholder','密码');
       loginFrom.password = $(this).val();
     }
-  })
+  });
   $('#login button[name=submit]').click(function(){
     //console.log(loginFrom);
     for(var key in loginFrom){
@@ -298,7 +298,7 @@ $(function() {
            $('.callout').fadeOut(500,function(){
              $('.callout').remove();
            });
-         },2000)
+         },2000);
          return false;
        }
     }
@@ -326,6 +326,8 @@ $(function() {
       })
     }
   });
+
+  // 进行编辑
   $('.jq-edit').click(function(){
     var md = $(this).attr('data-md');
     dialog({
@@ -336,7 +338,7 @@ $(function() {
       fixed: true
     })
     .showModal();
-  })
+  });
   var treeArr = [];
   function getTreeArr(obj){
     for(var key in obj){
@@ -384,10 +386,10 @@ $(function() {
       }
     });
     addBox.showModal();
-  })
+  });
   $(document).on('click','.add-box .btn-close',function(){
     addBox.close();
-  })
+  });
   function outPath(){
     var out = $('#choose-path').val()  + $('#in-path').val() + '.md';
     $('#out-path b').text(out);
@@ -399,7 +401,7 @@ $(function() {
   });
   $(document).on('keyup','#in-path',function(){
     outPath();
-  })
+  });
   $(document).on('blur','#in-path',function(){
     if(!(reg['s'].test($(this).val()))){
       $(this).parent().parent('.form-group').addClass('has-error');
@@ -408,7 +410,7 @@ $(function() {
       $(this).parent().parent('.form-group').removeClass('has-error');
       $(this).attr('placeholder','请输入文件名（可带目录）');
     }
-  })
+  });
   $(document).on('click','.add-box .btn-ok',function(){
     var out = $('#choose-path').val()  + $('#in-path').val();
     //过滤隐藏字符
@@ -416,7 +418,7 @@ $(function() {
     var obj = {
       file : out,
       newMenu:$('#in-path').val().indexOf('/')
-    }
+    };
     if(!(reg['s'].test($('#in-path').val()))){
       $('#in-path').parent().parent('.form-group').addClass('has-error');
       $('#in-path').val('').attr('placeholder','不允许为空或者包含特殊字符');
@@ -463,7 +465,7 @@ $(function() {
         }
       })
     }
-  })
+  });
 
   //删除图书
   $('.jq-rmbook').click(function(){
@@ -477,4 +479,4 @@ $(function() {
       }
     })
   })
-})
+});

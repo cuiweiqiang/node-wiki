@@ -7,7 +7,8 @@ treeModel = require '../models/tree'
 bookModel = require '../models/book'
 render = require '../tools/render'
 router = express.Router()
-
+multipart = require('connect-multiparty')
+multipartMiddleware = multipart({uploadDir: './public/files/'})
 #API Route
 router.get '/', (req, res, next) ->
   res.status 200
@@ -201,7 +202,7 @@ router.get '/delete', (req, res, next) ->
 
 
 #上传图片接口
-router.get '/uploadImg', (req, res, next) ->
+router.post '/uploadImg',multipartMiddleware, (req, res, next) ->
   unless req.loginInfo
     res.send
       status:0
@@ -210,6 +211,18 @@ router.get '/uploadImg', (req, res, next) ->
     #上传图片，对比 hash 值判断是否存在
     #如果存在，返回提示信息
     #不存在，生成hash，生成 url，保存入数据库（ImageDb），保存 hash，返回对应信息
+    if (req.body.name)
+      subname = req.body.name.split('.')
+    else
+      res.json {"status":0,"url":""}
+
+    newname = new Date().getTime()
+
+    fs.rename req.files.file.path,'doc/images/'+newname+'.'+subname[1],(err) ->
+      if err
+        console.log err
+
+    res.json {"status":1,"url":'/images/'+newname+'.'+subname[1]}
     return
 
 

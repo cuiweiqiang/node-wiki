@@ -124,6 +124,7 @@ Vim.defineEx("wq", "wq", function(cm, input) {
 
 var editor;
 $(document).ready(function() {
+
   $('body').layout({ // create 3-panels layout
     resizerDblClickToggle: false,
     resizable: false,
@@ -377,15 +378,24 @@ $(document).ready(function() {
     editor.focus();
   });
 
-  $('#image-icon').click(function() {
-    var text = editor.session.getTextRange(editor.selection.getRange()).trim();
+  CommonUtils.upload("image-icon",function(file,data){
+    data  = JSON.parse(data);
+    alert(data.status)
+    if(data.status == 1){
+      editor.insert('![新图片](' + data.url + ')');
+      editor.focus();
+    }
+    /*var text = editor.session.getTextRange(editor.selection.getRange()).trim();
     if(text.length == 0) {
       text = $(this).data('sample-text');
     }
-    var url = $(this).data('sample-url')
+    var url = $(this).data('sample-url');
     editor.insert('![' + text + '](' + url + ')');
-    editor.focus();
+    editor.focus();*/
   });
+/*  $('#image-icon').click(function() {
+
+  });*/
 
   $('#code-icon').click(function() {
     var text = editor.session.getTextRange(editor.selection.getRange()).trim();
