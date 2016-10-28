@@ -3,8 +3,10 @@ fs = require 'fs'
 path = require 'path'
 _ = require 'underscore'
 updata = require '../tools/updata'
+cryptoutil = require '../tools/cryptoutil'
 treeModel = require '../models/tree'
 bookModel = require '../models/book'
+imageModel = require '../models/image'
 render = require '../tools/render'
 router = express.Router()
 multipart = require('connect-multiparty')
@@ -218,11 +220,29 @@ router.post '/uploadImg',multipartMiddleware, (req, res, next) ->
 
     newname = new Date().getTime()
 
-    fs.rename req.files.file.path,'doc/images/'+newname+'.'+subname[1],(err) ->
+    fileName = newname+'.'+subname[1];
+    fs.rename req.files.file.path,'doc/images/'+fileName,(err) ->
       if err
         console.log err
 
-    res.json {"status":1,"url":'/images/'+newname+'.'+subname[1]}
+      cryptoutil.md5 fileName,(md5) ->
+        imageModel.findByHashCode md5,(err,image) ->
+          console.log err if err
+          if (image != null)
+            fs.unlink 'doc/images/'+fileName,() ->
+              res.json {"status":1,"url":image.url}
+          else
+            newImage = new imageModel
+              name    : fileName
+              hashCode    : md5
+              url     :'/images/'+fileName
+            newImage.save (err,imagen) ->
+              if err
+                console.log err
+
+              res.json {"status":1,"url":'/images/'+fileName}
+              return
+
     return
 
 

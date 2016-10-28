@@ -4,7 +4,7 @@ config =
   #数据库类型
   db:'mongodb'
   #数据库地址
-  dbIp:'127.0.0.1'
+  dbIp:'192.168.137.88'
   #数据库名
   dbName:'wiki'
   #数据库用户名
@@ -13,5 +13,5 @@ config =
   dbPassword:''
   #是否初始化过
   isFirst: true
-  
+
 module.exports = config
